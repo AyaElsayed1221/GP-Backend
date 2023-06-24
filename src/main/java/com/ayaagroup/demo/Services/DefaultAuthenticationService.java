@@ -59,7 +59,7 @@ public class DefaultAuthenticationService implements AuthenticationService {
 
         //hwa hna eh fayded el builder leh mba3ml4 object mn el JwtResponse we b assign gwah el JWT ??
         return JwtResponse.builder()
-                .jwtToken(jwt)
+                .token(jwt)
                 .build();
     }
 

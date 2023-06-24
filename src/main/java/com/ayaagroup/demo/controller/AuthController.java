@@ -2,11 +2,11 @@ package com.ayaagroup.demo.controller;
 
 
 import com.ayaagroup.demo.Services.AuthenticationService;
+import com.ayaagroup.demo.Services.DefaultUserDetailsService;
 import com.ayaagroup.demo.dto.JwtResponse;
 import com.ayaagroup.demo.dto.LabTechSignupRequest;
 import com.ayaagroup.demo.dto.LoginRequest;
 import com.ayaagroup.demo.dto.PatientSignupRequest;
-import com.ayaagroup.demo.entity.user.doctor.lab.LabTechnician;
 import com.ayaagroup.demo.security.user.DefaultUserDetails;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.JwtParser;
@@ -15,18 +15,24 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.Date;
 
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class AuthController {
+
+    @Autowired
+    DefaultUserDetailsService defaultUserDetailsService;
 
     @Value("${app.jwtSecret}")
     private String jwtSecret;
@@ -40,7 +46,7 @@ public class AuthController {
         return ResponseEntity.ok(jwtResponse);
     }
 
-    @GetMapping("/patient-signup")
+    @PostMapping("/patient-signup")
     public void patientSignup(@RequestBody PatientSignupRequest patientSignupRequest) {
        authenticationService.patientSignup(patientSignupRequest);
     }
@@ -49,6 +55,13 @@ public class AuthController {
     public void labTecSignup(@RequestBody LabTechSignupRequest labTechSignupRequest) {
         authenticationService.labTecSignup(labTechSignupRequest);
     }
+
+    /** get current user**/
+    @GetMapping("/current-user")
+    public DefaultUserDetails getCurrentUser(Principal principal){
+        return ((DefaultUserDetails) this.defaultUserDetailsService.loadUserByUsername(principal.getName()));
+    }
+
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {

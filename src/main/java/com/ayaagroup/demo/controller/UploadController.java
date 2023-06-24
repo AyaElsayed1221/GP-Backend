@@ -4,11 +4,13 @@ import com.ayaagroup.demo.Services.PatientService;
 import com.ayaagroup.demo.entity.prescription.ScanResult;
 import com.ayaagroup.demo.entity.prescription.TestResults;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 public class UploadController {
 
     @Autowired

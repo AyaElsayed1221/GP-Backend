@@ -30,9 +30,6 @@ public class DefaultUserDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
         var setOfGrantedAuthorities = user.getAuthorities().stream().map(SecurityAuthority::new).collect(Collectors.toList());
-        System.out.println(user.getUserName());
-        System.out.println(user.getAuthorities());
-        System.out.println(setOfGrantedAuthorities);
         return setOfGrantedAuthorities;
     }
 
